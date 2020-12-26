@@ -1,0 +1,1 @@
+资源来自https://forum.kerbalspaceprogram.com/index.php?/topic/78778-raredens-real-8k-skybox-for-texture-replacer/
