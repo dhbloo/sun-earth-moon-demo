@@ -80,21 +80,33 @@ private:
             sun->ShaderUniform("time") = t;
             return glm::scale(glm::identity<glm::mat4>(), glm::one<glm::vec3>() * sunSize);
         };
-        objects.push_back(RenderObject {sun, sunAnimFunc});
 
-        // Earth
+        // Moon
+        PRenderPass moon =
+            New<RenderPass>(MeshPreset::CreateUnitShpere(5),
+                            New<ShaderProgram>(VertShader::FromFile("shader/moon.vert"),
+                                               FragShader::FromFile("shader/moon.frag")));
+        moon->ShaderUniform("diffuseTex")   = New<Texture>("surface/moon.jpg");
+        moon->ShaderUniform("normalMapTex") = New<Texture>("surface/moon_normal.jpg", false);
+        moon->ShaderUniform("ambient")      = glm::one<glm::vec3>() * 0.02f;
+        moon->ShaderUniform("sunPos")       = glm::vec3(0, 0, 0);
+        moon->ShaderUniform("earthRadius")  = earthSize;
+        moon->ShaderUniform("sunColor")     = glm::vec3(1.f, 0.99f, 0.94f) * 9000.f;
+        moon->SetNeedNormalMatrix(true);
         auto moonAnimFunc = [=](float t) {
             glm::mat4 m = glm::identity<glm::mat4>();
             m           = glm::rotate(m, glm::fract(t / 365.f) * 2 * PI, glm::vec3(0, 1, 0));
             m           = glm::translate(m, glm::vec3(sunEarthDist, 0.f, 0.f));
-            m           = glm::rotate(m, glm::cos(t / 90.f) * 0.4f, glm::vec3(0, 0, 1));
-            m           = glm::rotate(m, glm::fract(t / 30.f) * 2 * PI, glm::vec3(0, 1, 0));
-            m           = glm::translate(m, glm::vec3(earthMoonDist, 0.f, 0.f));
-            m           = glm::scale(m, glm::one<glm::vec3>() * moonSize);
-            m           = glm::rotate(m, glm::fract(t / 30.f) * 2 * PI, glm::vec3(0, -1, 0));
+            moon->ShaderUniform("earthPos") = glm::vec3(m[3]);
+            m = glm::rotate(m, glm::cos(t / 90.f) * 0.4f, glm::vec3(0, 0, 1));
+            m = glm::rotate(m, glm::fract(t / 30.f) * 2 * PI, glm::vec3(0, 1, 0));
+            m = glm::translate(m, glm::vec3(earthMoonDist, 0.f, 0.f));
+            m = glm::scale(m, glm::one<glm::vec3>() * moonSize);
+            m = glm::rotate(m, glm::fract(t / 30.f) * 2 * PI, glm::vec3(0, -1, 0));
             return m;
         };
 
+        // Earth
         PRenderPass earth =
             New<RenderPass>(MeshPreset::CreateUnitShpere(6),
                             New<ShaderProgram>(VertShader::FromFile("shader/earth.vert"),
@@ -127,20 +139,9 @@ private:
             earth->ShaderUniform("moonPos")  = glm::vec3(moonAnimFunc(t)[3]);
             return m;
         };
+
+        objects.push_back(RenderObject {sun, sunAnimFunc});
         objects.push_back(RenderObject {earth, earthAnimFunc});
-
-        // Moon
-        PRenderPass moon =
-            New<RenderPass>(MeshPreset::CreateUnitShpere(5),
-                            New<ShaderProgram>(VertShader::FromFile("shader/moon.vert"),
-                                               FragShader::FromFile("shader/moon.frag")));
-        moon->ShaderUniform("diffuseTex")   = New<Texture>("surface/moon.jpg");
-        moon->ShaderUniform("normalMapTex") = New<Texture>("surface/moon_normal.jpg", false);
-        moon->ShaderUniform("ambient")      = glm::one<glm::vec3>() * 0.02f;
-        moon->ShaderUniform("sunPos")       = glm::vec3(0, 0, 0);
-        moon->ShaderUniform("sunColor")     = glm::vec3(1.f, 0.99f, 0.94f) * 9000.f;
-        moon->SetNeedNormalMatrix(true);
-
         objects.push_back(RenderObject {moon, moonAnimFunc});
     }
 

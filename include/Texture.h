@@ -21,5 +21,3 @@ private:
     bool                            setupOK;
     std::unordered_map<GLenum, int> properties;
 };
-
-using PTexture = std::shared_ptr<Texture>;

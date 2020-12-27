@@ -12,11 +12,11 @@
 
 宇宙背景：Cubemap天空盒
 
-太阳：发光材质 + FBM纹理扰动
+太阳：发光材质 + FBM纹理扰动 + 菲涅尔效果
 
-地球：PBR metallic + 暗面发光 + 太阳光采样（考虑月球遮挡） + 瑞利散射
+地球：PBR metallic + 暗面发光 + 太阳光采样（考虑月球阴影） + 瑞利散射
 
-月球：Lambert + Normal map
+月球：Lambert + Normal map + 地球阴影
 
 后处理：Bloom + HDR Tone mapping
 
@@ -27,3 +27,5 @@
 ![](./screenshot2.jpg)
 
 ![](./screenshot3.jpg)
+
+![](./screenshot4.jpg)
