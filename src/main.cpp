@@ -124,8 +124,8 @@ private:
         earth->ShaderUniform("bumpiness")    = 10.0f;
         earth->ShaderUniform("atmosphereThickness") = 0.05f;
         earth->ShaderUniform("lightSamples")        = 32;
-        earth->ShaderUniform("scatterViewSamples")  = 20;
-        earth->ShaderUniform("scatterLightSamples") = 10;
+        earth->ShaderUniform("scatterViewSamples")  = 24;
+        earth->ShaderUniform("scatterLightSamples") = 12;
         earth->SetNeedNormalMatrix(true);
         auto earthAnimFunc = [=](float t) {
             glm::mat4 m = glm::identity<glm::mat4>();

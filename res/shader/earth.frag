@@ -172,7 +172,7 @@ void main()
     float viewStep = viewScatterDist / scatterViewSamples;
     float viewOpticalDepth = 0.0;
 
-    const vec3 scatterCoef = vec3(0.0519673, 0.121497, 0.296453) * 2;
+    const vec3 scatterCoef = vec3(0.0519673, 0.121497, 0.296453);
     vec3 Lp = vec3(0.0);
 
     for (int i = scatterViewSamples; i >= 1; i--) {
@@ -214,6 +214,7 @@ void main()
     vec3 Is = sunColor / (lightDist * lightDist);
     float cosTheta = dot(V, L);
     float phase = 3.0 / (16.0 * PI) * (1.0 + cosTheta * cosTheta);
+    Lp = pow(Lp, vec3(2.2)) * 100;  // strength tweak
     vec3 Ls = Is * scatterCoef * phase * Lp;
     vec3 LoTransmittance = exp(-scatterCoef * LoOpticalDepth);
 
